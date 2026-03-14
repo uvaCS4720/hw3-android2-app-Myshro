@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import edu.nd.pmcburne.hwapp.one.model.Game
+import kotlinx.coroutines.flow.Flow
 
 /***************************************************************************************
  * REFERENCES
@@ -15,9 +16,12 @@ import edu.nd.pmcburne.hwapp.one.model.Game
 
 @Dao
 interface GameDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGames(games: List<Game>)
+    @Query("SELECT * FROM games WHERE dateKey = :dateKey AND gender = :gender ORDER BY status, startTime, awayTeam")
+    fun observeGames(dateKey: String, gender: String): Flow<List<GameEntity>>
 
-    @Query("SELECT * FROM games WHERE date = :date AND gender = :gender")
-    suspend fun getGames(date: String, gender: String): List<Game>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(games: List<GameEntity>)
+
+    @Query("DELETE FROM games WHERE dateKey = :dateKey AND gender = :gender")
+    suspend fun deleteForDateAndGender(dateKey: String, gender: String)
 }

@@ -8,18 +8,26 @@ import androidx.room.PrimaryKey
  * URL: https://developer.android.com/training/data-storage/room/defining-data
  * Software License: Apache License, Version 2.0
  ***************************************************************************************/
-
-
-@Entity(tableName = "games")
+@Entity(
+    tableName = "games",
+    primaryKeys = ["gameId", "dateKey", "gender"]
+)
 data class GameEntity(
-    @PrimaryKey val id: String,
-    val date: String,
-    val gender: String,
+    val gameId: String,
+    val dateKey: String,   // yyyy-MM-dd
+    val gender: String,    // men / women
+
     val homeTeam: String,
     val awayTeam: String,
-    val homeScore: Int,
-    val awayScore: Int,
-    val status: String,
-    val period: String?,
-    val clock: String?
+
+    val homeScore: String,
+    val awayScore: String,
+
+    val status: String,    // UPCOMING / LIVE / FINAL
+    val startTime: String,
+    val currentPeriod: String,
+    val clock: String,
+
+    val homeWinner: Boolean,
+    val awayWinner: Boolean
 )
